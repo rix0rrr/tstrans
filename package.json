@@ -1,0 +1,24 @@
+{
+  "name": "tstrans",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^13.7.0",
+    "astq": "^2.6.6",
+    "asty": "^1.8.9",
+    "asty-astq": "^1.12.3",
+    "chalk": "^3.0.0",
+    "source-map-support": "^0.5.16",
+    "typescript": "^3.7.5"
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.0"
+  }
+}
