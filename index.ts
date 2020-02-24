@@ -1,13 +1,13 @@
 import * as ts from 'typescript';
 import 'source-map-support/register';
-import { convertNode } from './lib/ts-to-ast';
+import { convertNode } from './lib/ts/ts-to-ast';
 import { printAstNode } from './lib/printing';
 
 function compile(fileNames: string[], options: ts.CompilerOptions) {
   let program = ts.createProgram(fileNames, options);
 
   const sourceFile = program.getSourceFile(fileNames[0])!;
-  const ast = convertNode(sourceFile);
+  const ast = convertNode(sourceFile, sourceFile);
   printAstNode(ast, process.stdout);
 }
 

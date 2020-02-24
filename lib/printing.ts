@@ -13,17 +13,19 @@ export function printAstNode(root: AstNode, stream: NodeJS.WritableStream) {
 
       stream.write(`\n${indent} ${thisNodeBranch} ${chalk.underline(slotName)}:`);
       if (node.definition.isNodeSlot(slotName)) {
-        const deeperIndent = `${indent} ${chldNodeBranch}     `;
-        stream.write(`\n${deeperIndent}`);
         assertIsAstNode(value);
-        recurse(value, deeperIndent);
+        stream.write(`\n${indent} ${chldNodeBranch}  ⊙ `);
+        recurse(value, `${indent} ${chldNodeBranch}    `);
       } else if (node.definition.isNodeArraySlot(slotName)) {
         assertIsAstNodeArray(value);
+        if (value.length === 0) {
+          stream.write(' []');
+        }
         for (const [element, lastEl] of withLast(value)) {
           const elBranch = lastEl ? '└─' : '├─';
           const sbBranch = lastEl ? '  ' : '│ ';
-          stream.write  (`\n${indent}     ${elBranch} `);
-          recurse(element, `${indent}     ${sbBranch} `);
+          stream.write  (`\n${indent} ${chldNodeBranch}  ${elBranch} `);
+          recurse(element, `${indent} ${chldNodeBranch}  ${sbBranch} `);
         }
       } else {
         stream.write(` ${value}`);

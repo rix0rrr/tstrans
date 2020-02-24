@@ -1,58 +1,480 @@
-import { AstNodeDefinition } from "./ast";
+import { AstNodeDefinition } from "../ast";
+import * as ts from 'typescript';
 
+export const REGULAR_NODES = [
+  new AstNodeDefinition('ts:source_file', {
+    slots: {
+      statements: { list: true }
+    },
+    attributes: {
+      kind: ts.SyntaxKind.SourceFile,
+    }
+  }),
 
-expot const SYNTAX_MAP = new Map<ts.SyntaxKind, AstNodeDefinition>([
-  [ts.SyntaxKind.SourceFile, SOURCE_FILE],
-]);
+  new AstNodeDefinition('ts:string_literal', {
+    slots: {
+      text: { type: 'string' }
+    },
+    attributes: {
+      kind: ts.SyntaxKind.StringLiteral,
+    }
+  }),
 
-export const SOURCE_FILE = new AstNodeDefinition({
-  name: 'ts:source_file',
+  new AstNodeDefinition('ts:function_declaration', {
+    slots: {
+      name: { optional: true },
+      body: { optional: true },
+      type: { optional: true },
+      parameters: { list: true },
+      modifiers: { list: true, optional: true },
+      decorators: { list: true, optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.FunctionDeclaration,
+    }
+  }),
+
+  new AstNodeDefinition('ts:identifier', {
+    slots: {
+      text: { type: 'string' },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.Identifier,
+    }
+  }),
+
+  new AstNodeDefinition('ts:block', {
+    slots: {
+      statements: { list: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.Block,
+    }
+  }),
+
+  new AstNodeDefinition('ts:parameter', {
+    slots: {
+      name: {},
+      type: { optional: true },
+      initializer: { optional: true },
+      dotDotDotToken: { optional: true },
+      modifiers: { list: true, optional: true },
+      decorators: { list: true, optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.Parameter,
+    }
+  }),
+
+  new AstNodeDefinition('ts:return_statement', {
+    slots: {
+      expression: { optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.ReturnStatement,
+    }
+  }),
+
+  new AstNodeDefinition('ts:binary_expression', {
+    slots: {
+      left: { },
+      right: { },
+      operatorToken: { },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.BinaryExpression,
+    }
+  }),
+
+  new AstNodeDefinition('ts:if_statement', {
+    slots: {
+      expression: { },
+      thenStatement: { },
+      elseStatement: { optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.IfStatement,
+    }
+  }),
+
+  new AstNodeDefinition('ts:property_access_expression', {
+    slots: {
+      expression: { },
+      name: { },
+      questionDotToken: { optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.PropertyAccessExpression,
+    }
+  }),
+
+  new AstNodeDefinition('ts:call_expression', {
+    slots: {
+      expression: { },
+      arguments: { list: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.CallExpression,
+    }
+  }),
+
+  new AstNodeDefinition('ts:expression_statement', {
+    slots: {
+      expression: { },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.ExpressionStatement,
+    }
+  }),
+
+  new AstNodeDefinition('ts:object_literal_expression', {
+    slots: {
+      properties: { list: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.ObjectLiteralExpression,
+    }
+  }),
+
+  new AstNodeDefinition('ts:new_expression', {
+    slots: {
+      expression: {  },
+      arguments: { list: true, optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.NewExpression,
+    }
+  }),
+
+  new AstNodeDefinition('ts:property_assignment', {
+    slots: {
+      name: { },
+      initializer: { },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.PropertyAssignment,
+    }
+  }),
+
+  new AstNodeDefinition('ts:variable_statement', {
+    slots: {
+      name: { },
+      initializer: { },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.VariableStatement,
+    }
+  }),
+
+  new AstNodeDefinition('ts:variable_declaration_list', {
+    slots: {
+      declarations: { list: true },
+      modifiers: { list: true, optional: true },
+      decorators: { list: true, optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.VariableDeclarationList,
+    }
+  }),
+
+  new AstNodeDefinition('ts:variable_declaration', {
+    slots: {
+      name: { },
+      type: { optional: true },
+      initializer: { optional: true },
+      modifiers: { list: true, optional: true },
+      decorators: { list: true, optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.VariableDeclaration,
+    }
+  }),
+
+  new AstNodeDefinition('ts:array_literal_expression', {
+    slots: {
+      elements: { list: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.ArrayLiteralExpression,
+    }
+  }),
+
+  new AstNodeDefinition('ts:shorthand_property_assignment', {
+    slots: {
+      name: { },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.ShorthandPropertyAssignment,
+    }
+  }),
+
+  new AstNodeDefinition('ts:for_of_statement', {
+    slots: {
+      expression: { },
+      initializer: { },
+      awaitModifier: { optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.ForOfStatement,
+    }
+  }),
+
+  new AstNodeDefinition('ts:class_declaration', {
+    slots: {
+      name: { optional: true },
+      heritageClauses: { list: true, optional: true },
+      members: { list: true },
+      modifiers: { list: true, optional: true },
+      decorators: { list: true, optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.ClassDeclaration,
+    }
+  }),
+
+  new AstNodeDefinition('ts:constructor_declaration', {
+    slots: {
+      name: { optional: true },
+      body: { optional: true },
+      type: { optional: true },
+      parameters: { list: true },
+      modifiers: { list: true, optional: true },
+      decorators: { list: true, optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.Constructor,
+    }
+  }),
+
+  new AstNodeDefinition('ts:property_declaration', {
+    slots: {
+      name: { },
+      initializer: { optional: true },
+      type: { optional: true },
+      questionToken: { optional: true },
+      exclamationToken: { optional: true },
+      modifiers: { list: true, optional: true },
+      decorators: { list: true, optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.PropertyDeclaration,
+    }
+  }),
+
+  new AstNodeDefinition('ts:property_signature', {
+    slots: {
+      name: { },
+      initializer: { optional: true },
+      type: { optional: true },
+      questionToken: { optional: true },
+      modifiers: { list: true, optional: true },
+      decorators: { list: true, optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.PropertySignature,
+    }
+  }),
+
+  new AstNodeDefinition('ts:method_declaration', {
+    slots: {
+      name: { optional: true },
+      body: { optional: true },
+      type: { optional: true },
+      parameters: { list: true },
+      modifiers: { list: true, optional: true },
+      decorators: { list: true, optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.MethodDeclaration,
+    }
+  }),
+
+  new AstNodeDefinition('ts:method_signature', {
+    slots: {
+      name: { optional: true },
+      body: { optional: true },
+      type: { optional: true },
+      parameters: { list: true },
+      modifiers: { list: true, optional: true },
+      decorators: { list: true, optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.MethodSignature,
+    }
+  }),
+
+  new AstNodeDefinition('ts:interface_declaration', {
+    slots: {
+      name: { optional: true },
+      heritageClauses: { list: true, optional: true },
+      members: { list: true },
+      modifiers: { list: true, optional: true },
+      decorators: { list: true, optional: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.InterfaceDeclaration,
+    }
+  }),
+
+  new AstNodeDefinition('ts:decorator', {
+    slots: {
+      expression: { },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.Decorator,
+    }
+  }),
+
+  new AstNodeDefinition('ts:as_expression', {
+    slots: {
+      expression: { },
+      type: { },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.AsExpression,
+    }
+  }),
+
+  new AstNodeDefinition('ts:prefix_unary_expression', {
+    slots: {
+      operator: { type: 'string' /* FIMXE: actually number */ },
+      operand: { },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.PrefixUnaryExpression,
+    }
+  }),
+
+  new AstNodeDefinition('ts:postfix_unary_expression', {
+    slots: {
+      operator: { type: 'string' /* FIMXE: actually number */ },
+      operand: { },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.PostfixUnaryExpression,
+    }
+  }),
+
+  new AstNodeDefinition('ts:spread_element', {
+    slots: {
+      expression: { },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.SpreadElement,
+    }
+  }),
+
+  new AstNodeDefinition('ts:spread_assignment', {
+    slots: {
+      expression: { },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.SpreadAssignment,
+    }
+  }),
+
+  new AstNodeDefinition('ts:template_expression', {
+    slots: {
+      head: { },
+      templateSpans: { list: true },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.TemplateExpression,
+    }
+  }),
+
+  new AstNodeDefinition('ts:template_head', {
+    slots: {
+      rawText: { optional: true, type: 'string' },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.TemplateHead,
+    }
+  }),
+
+  new AstNodeDefinition('ts:template_middle', {
+    slots: {
+      rawText: { optional: true, type: 'string' },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.TemplateMiddle,
+    }
+  }),
+
+  new AstNodeDefinition('ts:template_tail', {
+    slots: {
+      rawText: { optional: true, type: 'string' },
+    },
+    attributes: {
+      kind: ts.SyntaxKind.TemplateTail,
+    }
+  }),
+
+  new AstNodeDefinition('ts:template_span', {
+    slots: {
+      expression: {},
+      literal: {},
+    },
+    attributes: {
+      kind: ts.SyntaxKind.TemplateSpan,
+    }
+  }),
+
+  new AstNodeDefinition('ts:non_null_expression', {
+    slots: {
+      expression: {},
+    },
+    attributes: {
+      kind: ts.SyntaxKind.NonNullExpression,
+    }
+  }),
+
+  new AstNodeDefinition('ts:parenthesized_expression', {
+    slots: {
+      expression: {},
+    },
+    attributes: {
+      kind: ts.SyntaxKind.ParenthesizedExpression,
+    }
+  }),
+
+  new AstNodeDefinition('ts:no_substitution_template_literal', {
+    slots: {
+      text: { type: 'string'},
+    },
+    attributes: {
+      kind: ts.SyntaxKind.NoSubstitutionTemplateLiteral,
+    }
+  }),
+];
+
+export const TOKEN = new AstNodeDefinition('ts:token', {
   slots: {
-    statements: { list: true }
+    text: { type: 'string' },
+  },
+  attributes: {
+    useText: true,
   }
 });
 
-importStatement(node: ImportStatement, context: AstRenderer<C>): OTree;
-stringLiteral(node: ts.StringLiteral, children: AstRenderer<C>): OTree;
-functionDeclaration(node: ts.FunctionDeclaration, children: AstRenderer<C>): OTree;
-identifier(node: ts.Identifier, children: AstRenderer<C>): OTree;
-block(node: ts.Block, children: AstRenderer<C>): OTree;
-parameterDeclaration(node: ts.ParameterDeclaration, children: AstRenderer<C>): OTree;
-returnStatement(node: ts.ReturnStatement, context: AstRenderer<C>): OTree;
-binaryExpression(node: ts.BinaryExpression, context: AstRenderer<C>): OTree;
-ifStatement(node: ts.IfStatement, context: AstRenderer<C>): OTree;
-propertyAccessExpression(node: ts.PropertyAccessExpression, context: AstRenderer<C>): OTree;
-callExpression(node: ts.CallExpression, context: AstRenderer<C>): OTree;
-expressionStatement(node: ts.ExpressionStatement, context: AstRenderer<C>): OTree;
-token<A extends ts.SyntaxKind>(node: ts.Token<A>, context: AstRenderer<C>): OTree;
-objectLiteralExpression(node: ts.ObjectLiteralExpression, context: AstRenderer<C>): OTree;
-newExpression(node: ts.NewExpression, context: AstRenderer<C>): OTree;
-propertyAssignment(node: ts.PropertyAssignment, context: AstRenderer<C>): OTree;
-variableStatement(node: ts.VariableStatement, context: AstRenderer<C>): OTree;
-variableDeclarationList(node: ts.VariableDeclarationList, context: AstRenderer<C>): OTree;
-variableDeclaration(node: ts.VariableDeclaration, context: AstRenderer<C>): OTree;
-jsDoc(node: ts.JSDoc, context: AstRenderer<C>): OTree;
-arrayLiteralExpression(node: ts.ArrayLiteralExpression, context: AstRenderer<C>): OTree;
-shorthandPropertyAssignment(node: ts.ShorthandPropertyAssignment, context: AstRenderer<C>): OTree;
-forOfStatement(node: ts.ForOfStatement, context: AstRenderer<C>): OTree;
-classDeclaration(node: ts.ClassDeclaration, context: AstRenderer<C>): OTree;
-constructorDeclaration(node: ts.ConstructorDeclaration, context: AstRenderer<C>): OTree;
-propertyDeclaration(node: ts.PropertyDeclaration, context: AstRenderer<C>): OTree;
-methodDeclaration(node: ts.MethodDeclaration, context: AstRenderer<C>): OTree;
-interfaceDeclaration(node: ts.InterfaceDeclaration, context: AstRenderer<C>): OTree;
-propertySignature(node: ts.PropertySignature, context: AstRenderer<C>): OTree;
-methodSignature(node: ts.MethodSignature, context: AstRenderer<C>): OTree;
-asExpression(node: ts.AsExpression, context: AstRenderer<C>): OTree;
-prefixUnaryExpression(node: ts.PrefixUnaryExpression, context: AstRenderer<C>): OTree;
-spreadElement(node: ts.SpreadElement, context: AstRenderer<C>): OTree;
-spreadAssignment(node: ts.SpreadAssignment, context: AstRenderer<C>): OTree;
-templateExpression(node: ts.TemplateExpression, context: AstRenderer<C>): OTree;
-nonNullExpression(node: ts.NonNullExpression, context: AstRenderer<C>): OTree;
-parenthesizedExpression(node: ts.ParenthesizedExpression, context: AstRenderer<C>): OTree;
-maskingVoidExpression(node: ts.VoidExpression, context: AstRenderer<C>): OTree;
-noSubstitutionTemplateLiteral(node: ts.NoSubstitutionTemplateLiteral, context: AstRenderer<C>): OTree;
+export const KEYWORD = new AstNodeDefinition('ts:keyword', {
+  slots: {
+    text: { type: 'string' },
+  },
+  attributes: {
+    useText: true,
+  }
+});
 
-export const UNKNOWN_NODE = new AstNodeDefinition({
-  name: 'unknown_node',
+export const BINARY_OPERATOR = new AstNodeDefinition('ts:binary_operator', {
+  slots: {
+    text: { type: 'string' },
+  },
+  attributes: {
+    useText: true,
+  }
+});
+
+export const UNKNOWN_NODE = new AstNodeDefinition('unknown_node', {
   slots: {},
 });

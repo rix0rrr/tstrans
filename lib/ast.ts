@@ -1,6 +1,8 @@
+import { noUndefined } from "./util";
+
 export interface AstNodeDefinitionOptions {
-  readonly name: string;
   readonly slots: Record<string, SlotDefinition>;
+  readonly attributes?: Record<string, any>;
 }
 
 function defaultSlotDefinition(def: SlotDefinition): SlotDefinition {
@@ -16,24 +18,30 @@ function defaultSlotDefinition(def: SlotDefinition): SlotDefinition {
  */
 export class AstNodeDefinition {
   public readonly slots: Record<string, SlotDefinition>;
-  public readonly name: string;
+  public readonly attributes: Record<string, any>;
 
-  constructor(options: AstNodeDefinitionOptions) {
-    this.name = options.name;
+  constructor(public readonly name: string, options: AstNodeDefinitionOptions) {
     this.slots = options.slots;
+    this.attributes = options.attributes ?? {};
   }
 
   public createNode(values: Record<string, any>) {
-    for (const [key, value] of Object.entries(values)) {
-      if (!(key in this.slots)) { throw new Error(`Not a valid slot on '${this.name}': ${key}`); }
-      validateSlotValue(value, this.slots[key]);
-    }
-    const missing = this.requiredSlots().filter(k => !(k in values));
-    if (missing.length) {
-      throw new Error(`Missing slots creating '${this.name}': ${missing}`);
-    }
+    try {
+      values = noUndefined(values);
 
-    return new AstNode(this, values);
+      for (const [key, value] of Object.entries(values)) {
+        if (!(key in this.slots)) { throw new Error(`Not a valid slot on '${this.name}': ${key}`); }
+        validateSlotValue(value, this.slots[key]);
+      }
+      const missing = this.requiredSlots().filter(k => !(k in values));
+      if (missing.length) {
+        throw new Error(`Missing slots creating '${this.name}': ${missing}`);
+      }
+
+      return new AstNode(this, values);
+    } catch (e) {
+      throw new Error(`While creating a '${this.name}' from '${JSON.stringify(values)}': ${e}`);
+    }
   }
 
   public isNodeSlot(slotName: string) {
@@ -80,6 +88,11 @@ function validateSlotValueType(value: any, def: SlotDefinition) {
         throw new Error(`Expected string, got '${value}'`);
       }
       break;
+    case 'number':
+      if (typeof value !== 'number') {
+        throw new Error(`Expected number, got '${value}'`);
+      }
+      break;
   }
 }
 
@@ -89,7 +102,18 @@ export class AstNode {
 }
 
 export type SlotDefinition = {
-  type?: 'node' | 'string';
+  /**
+   * @default node
+   */
+  type?: 'node' | 'string' | 'number';
+
+  /**
+   * Is this a list
+   */
   list?: boolean;
+
+  /**
+   * Is this field optional
+   */
   optional?: boolean;
 }
