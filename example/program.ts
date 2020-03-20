@@ -5,4 +5,11 @@ export abstract class MyClass {
   public what() {
     return this.henk;
   }
+
+  public dinges() {
+    const variable = 'variable';
+    const banaan = 'banaan';
+
+    return { variable, banaan: banaan };
+  }
 }

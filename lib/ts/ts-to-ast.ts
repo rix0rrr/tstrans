@@ -11,10 +11,16 @@ export function convertNode(node: ts.Node, sourceFile: ts.SourceFile): AstNode {
 }
 
 function autoConvertNode(node: ts.Node, sourceFile: ts.SourceFile, def: AstNodeDefinition): AstNode {
-  const valueSource = def.attributes.useText ? {
-    text: node.getText(sourceFile),
-    ...node,
-  } : node;
+  const enhancedValues: any = {};
+
+  if (def.attributes.useText) {
+    enhancedValues.text = node.getText(sourceFile);
+  }
+  if (def.attributes.tsflags) {
+    enhancedValues.flags = analyzeFlags(node.flags);
+  }
+
+  const valueSource = Object.assign({}, node, enhancedValues);
 
   let values = pick(valueSource, Object.keys(def.slots));
   values = nodesToAstNodes(values, sourceFile);
@@ -51,4 +57,14 @@ function isTsNode(x: any): x is ts.Node {
 
 function isTsNodeArray(x: any): x is ts.Node[] {
   return Array.isArray(x) && x.every(isTsNode);
+}
+
+function analyzeFlags(flags: ts.NodeFlags): string[] | undefined {
+  const ret: string[] = [];
+  for (const f in ts.NodeFlags) {
+    if (!isNaN(Number(f)) && (flags & Number(f)) !== 0) {
+      ret.push(ts.NodeFlags[f]);
+    }
+  }
+  return ret.length > 0 ? ret : undefined;
 }

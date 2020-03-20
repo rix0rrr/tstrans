@@ -1,5 +1,15 @@
-import { AstNodeDefinition } from "../ast";
+import { AstNodeDefinition, SlotDefinition } from "../ast";
 import * as ts from 'typescript';
+
+const sharedNodeSlots: Record<string, SlotDefinition> = {
+  flags: { optional: true, type: 'string', list: true },
+  modifiers: { list: true, optional: true },
+  decorators: { list: true, optional: true },
+};
+
+const sharedNodeAttributes = {
+  tsflags: true,
+};
 
 export const REGULAR_NODES = [
   new AstNodeDefinition('ts:source_file', {
@@ -26,11 +36,11 @@ export const REGULAR_NODES = [
       body: { optional: true },
       type: { optional: true },
       parameters: { list: true },
-      modifiers: { list: true, optional: true },
-      decorators: { list: true, optional: true },
+      ...sharedNodeSlots,
     },
     attributes: {
       kind: ts.SyntaxKind.FunctionDeclaration,
+      ...sharedNodeAttributes,
     }
   }),
 
@@ -40,6 +50,7 @@ export const REGULAR_NODES = [
     },
     attributes: {
       kind: ts.SyntaxKind.Identifier,
+      useText: true,
     }
   }),
 
@@ -58,11 +69,11 @@ export const REGULAR_NODES = [
       type: { optional: true },
       initializer: { optional: true },
       dotDotDotToken: { optional: true },
-      modifiers: { list: true, optional: true },
-      decorators: { list: true, optional: true },
+      ...sharedNodeSlots,
     },
     attributes: {
       kind: ts.SyntaxKind.Parameter,
+      ...sharedNodeAttributes,
     }
   }),
 
@@ -158,22 +169,23 @@ export const REGULAR_NODES = [
 
   new AstNodeDefinition('ts:variable_statement', {
     slots: {
-      name: { },
-      initializer: { },
+      declarationList: { },
+      ...sharedNodeSlots,
     },
     attributes: {
       kind: ts.SyntaxKind.VariableStatement,
+      ...sharedNodeAttributes,
     }
   }),
 
   new AstNodeDefinition('ts:variable_declaration_list', {
     slots: {
       declarations: { list: true },
-      modifiers: { list: true, optional: true },
-      decorators: { list: true, optional: true },
+      ...sharedNodeSlots,
     },
     attributes: {
       kind: ts.SyntaxKind.VariableDeclarationList,
+      ...sharedNodeAttributes,
     }
   }),
 
@@ -182,11 +194,11 @@ export const REGULAR_NODES = [
       name: { },
       type: { optional: true },
       initializer: { optional: true },
-      modifiers: { list: true, optional: true },
-      decorators: { list: true, optional: true },
+      ...sharedNodeSlots,
     },
     attributes: {
       kind: ts.SyntaxKind.VariableDeclaration,
+      ...sharedNodeAttributes,
     }
   }),
 
@@ -224,11 +236,11 @@ export const REGULAR_NODES = [
       name: { optional: true },
       heritageClauses: { list: true, optional: true },
       members: { list: true },
-      modifiers: { list: true, optional: true },
-      decorators: { list: true, optional: true },
+      ...sharedNodeSlots,
     },
     attributes: {
       kind: ts.SyntaxKind.ClassDeclaration,
+      ...sharedNodeAttributes,
     }
   }),
 
@@ -238,11 +250,11 @@ export const REGULAR_NODES = [
       body: { optional: true },
       type: { optional: true },
       parameters: { list: true },
-      modifiers: { list: true, optional: true },
-      decorators: { list: true, optional: true },
+      ...sharedNodeSlots,
     },
     attributes: {
       kind: ts.SyntaxKind.Constructor,
+      ...sharedNodeAttributes,
     }
   }),
 
@@ -253,11 +265,11 @@ export const REGULAR_NODES = [
       type: { optional: true },
       questionToken: { optional: true },
       exclamationToken: { optional: true },
-      modifiers: { list: true, optional: true },
-      decorators: { list: true, optional: true },
+      ...sharedNodeSlots,
     },
     attributes: {
       kind: ts.SyntaxKind.PropertyDeclaration,
+      ...sharedNodeAttributes,
     }
   }),
 
@@ -267,11 +279,11 @@ export const REGULAR_NODES = [
       initializer: { optional: true },
       type: { optional: true },
       questionToken: { optional: true },
-      modifiers: { list: true, optional: true },
-      decorators: { list: true, optional: true },
+      ...sharedNodeSlots,
     },
     attributes: {
       kind: ts.SyntaxKind.PropertySignature,
+      ...sharedNodeAttributes,
     }
   }),
 
@@ -281,11 +293,11 @@ export const REGULAR_NODES = [
       body: { optional: true },
       type: { optional: true },
       parameters: { list: true },
-      modifiers: { list: true, optional: true },
-      decorators: { list: true, optional: true },
+      ...sharedNodeSlots,
     },
     attributes: {
       kind: ts.SyntaxKind.MethodDeclaration,
+      ...sharedNodeAttributes,
     }
   }),
 
@@ -295,11 +307,11 @@ export const REGULAR_NODES = [
       body: { optional: true },
       type: { optional: true },
       parameters: { list: true },
-      modifiers: { list: true, optional: true },
-      decorators: { list: true, optional: true },
+      ...sharedNodeSlots,
     },
     attributes: {
       kind: ts.SyntaxKind.MethodSignature,
+      ...sharedNodeAttributes,
     }
   }),
 
@@ -308,11 +320,11 @@ export const REGULAR_NODES = [
       name: { optional: true },
       heritageClauses: { list: true, optional: true },
       members: { list: true },
-      modifiers: { list: true, optional: true },
-      decorators: { list: true, optional: true },
+      ...sharedNodeSlots,
     },
     attributes: {
       kind: ts.SyntaxKind.InterfaceDeclaration,
+      ...sharedNodeAttributes,
     }
   }),
 
