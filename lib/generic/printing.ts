@@ -1,4 +1,4 @@
-import { AstNode } from './ast';
+import { AstNode } from './node';
 import chalk = require('chalk');
 
 export function printAstNode(root: AstNode, stream: NodeJS.WritableStream) {

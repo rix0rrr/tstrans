@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import 'source-map-support/register';
 import { convertNode } from './lib/ts/ts-to-ast';
-import { printAstNode } from './lib/printing';
+import { printAstNode } from './lib/generic/printing';
 
 function compile(fileNames: string[], options: ts.CompilerOptions) {
   let program = ts.createProgram(fileNames, options);

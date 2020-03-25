@@ -1,5 +1,5 @@
 import * as ts from 'typescript';
-import { AstNodeDefinition } from '../ast';
+import { AstNodeDefinition } from '../generic/definition';
 import { REGULAR_NODES, TOKEN, BINARY_OPERATOR, KEYWORD } from './nodes';
 
 export const SYNTAX_MAP = new Map<ts.SyntaxKind, AstNodeDefinition>();

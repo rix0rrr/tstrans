@@ -1,5 +1,6 @@
 import * as ts from 'typescript';
-import { AstNodeDefinition, AstNode } from '../ast';
+import { AstNodeDefinition } from '../generic/definition';
+import { AstNode } from '../generic/node';
 import { SYNTAX_MAP } from './syntax-map';
 import { UNKNOWN_NODE } from './nodes';
 

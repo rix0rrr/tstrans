@@ -1,4 +1,5 @@
-import { noUndefined } from "./util";
+import { noUndefined } from "../util";
+import { AstNode } from "./node";
 
 export interface AstNodeDefinitionOptions {
   readonly slots: Record<string, SlotDefinition>;
@@ -96,10 +97,6 @@ function validateSlotValueType(value: any, def: SlotDefinition) {
   }
 }
 
-export class AstNode {
-  constructor(public readonly definition: AstNodeDefinition, public readonly values: Record<string, any>) {
-  }
-}
 
 export type SlotDefinition = {
   /**

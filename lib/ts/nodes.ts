@@ -1,4 +1,4 @@
-import { AstNodeDefinition, SlotDefinition } from "../ast";
+import { AstNodeDefinition, SlotDefinition } from "../generic/definition";
 import * as ts from 'typescript';
 
 const sharedNodeSlots: Record<string, SlotDefinition> = {
